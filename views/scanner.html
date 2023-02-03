@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR CODE READER</title>
+    <style>
+        body{
+            text-align: center;
+        }
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #reader {
+            width: 400px;
+        }
+        #result{
+            text-align: center;
+            font: size 1.5em; 
+        }
+
+    </style>
+     <script src="html5-qrcode.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+
+    
+
+        <main>
+            <div id="reader"></div>
+            <div id="result"></div>
+        </main>
+        <br><br>
+
+        
+
+            
+        
+    
+  <button onclick="out()" id="show"> SHOW </button>
+
+<br><br>
+
+
+     PRODUCT ID:  <input type="text" name="id" id="store" required><br><br>
+    PRICE: <input type="number" id="price" name="price" required> <br><br>
+  QUANITITY:  <input type="number" id="quanitity" name="quanitity" required><br><br>
+  <button onclick="add()" id="add"> ADD </button>
+      
+      
+       
+     
+<p name="id" id="id"></p><br><br>
+<p name="price" id="pris"></p><br><br>
+<p name="quanitity" id="qanitity"></p><br><br>
+<button onclick="save()" id="add"> SAVE </button>
+      <script>
+             const scanner =  new  Html5QrcodeScanner('reader',{
+                qrbox:{
+
+                    width:250,
+                    height:250
+                },
+                fps:20,
+             });
+             
+             scanner.render(success,error)
+             function success(result){
+               // console.log(result)
+                document.getElementById('store').value = `${result}`;
+              
+
+               }
+                function error(err)
+                 {
+                console.error(err);
+                 }
+                var i=0;
+                let array_id = [];
+                let array_price=[];
+                let array_quanitity=[];
+                function add()
+               {    
+                    var id_ = document.getElementById("store").value;
+                    document.getElementById("store").value="";
+                    var price_ = document.getElementById("price").value;
+                    document.getElementById("price").value="";
+                    var quanitity_ = document.getElementById("quanitity").value;
+                    document.getElementById("quanitity").value="";
+                    array_id[i]=id_;
+                    array_price[i]=price_;
+                    array_quanitity[i]=quanitity_;
+                    
+                    i++;
+               }
+               let t=i;
+               
+         
+               function save()
+                {
+                    const id = JSON.stringify(array_id);
+                    const price = JSON.stringify(array_price);
+                    const quanitity = JSON.stringify(array_quanitity);
+                        console.log(id)
+                        console.log(price)
+                        console.log(quanitity)
+                        let option={
+                            method:"POST",
+                            headers:{ 
+                                "Content-type":"application/json"
+
+                            },
+                            body:{
+                                product_id:id,
+                                product_price:price,
+                                product_quantity:quanitity
+
+                            },
+                        }
+                        fetch('/product_storing',option)
+                          }   
+                  
+    </script>
+    </body>
+    </html>
+
+   
+   
